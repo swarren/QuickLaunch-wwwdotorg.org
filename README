@@ -4,6 +4,6 @@ QuickLaunch@wwwdotorg.org
 
 = DESCRIPTION =
 
-This extension adds a button for each Quick Launch .desktop file founc
+This extension adds a button for each Quick Launch .desktop file found
 in ~/.local/user/quicklaunch to the Gnome panel.
 
