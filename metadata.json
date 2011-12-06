@@ -1,0 +1,10 @@
+{
+  "description": "Quicklaunch - Launches .desktop files from ~/.local/user/quicklaunch", 
+  "name": "WWWDOTORG Quick Launch", 
+  "shell-version": [
+    "3.2"
+  ], 
+  "url": "None yet", 
+  "uuid": "QuickLaunch@wwwdotorg.org", 
+  "version": 2
+}
