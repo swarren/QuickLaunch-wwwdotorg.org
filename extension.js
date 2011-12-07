@@ -46,27 +46,6 @@ function QLContainer() {
 
 QLContainer.prototype = {
     _init: function() {
-        this.actor = new St.BoxLayout({ name: 'qlContainer',
-                                        style_class: 'qlcontainer' });
-
-        this.items = new Object();
-
-        let qlPathObj = Gio.file_new_for_path(qlPath);
-
-        this.qlPathMon = qlPathObj.monitor_directory(Gio.FileMonitorFlags.NONE, null);
-        this.qlPathMon.connect('changed', Lang.bind(this, function (monitor, f, otherf, event) {
-            if (event == 1)
-                this.addItem(f.get_basename())
-            else if (event == 2)
-                this.removeItem(f.get_basename())
-            else if (event == 3)
-                this.addItem(f.get_basename())
-        }));
-
-        FileUtils.listDirAsync(qlPathObj, Lang.bind(this, function(files) {
-            for (let i = 0; i < files.length; i++)
-                this.addItem(files[i].get_name())
-        }));
     },
 
     addItem: function(filename) {
@@ -106,11 +85,45 @@ QLContainer.prototype = {
     },
 
     enable: function() {
+        this.items = new Object();
+
+        this.actor = new St.BoxLayout({ name: 'qlContainer',
+                                        style_class: 'qlcontainer' });
+
+        let qlPathObj = Gio.file_new_for_path(qlPath);
+
+        this.qlPathMon = qlPathObj.monitor_directory(Gio.FileMonitorFlags.NONE, null);
+        this.qlPathMonSigId = this.qlPathMon.connect('changed',
+            Lang.bind(this, function (monitor, f, otherf, event) {
+                if (event == 1)
+                    this.addItem(f.get_basename())
+                else if (event == 2)
+                    this.removeItem(f.get_basename())
+                else if (event == 3)
+                    this.addItem(f.get_basename())
+        }));
+
+        FileUtils.listDirAsync(qlPathObj, Lang.bind(this, function(files) {
+            for (let i = 0; i < files.length; i++)
+                this.addItem(files[i].get_name())
+        }));
+
         Main.panel._leftBox.insert_actor(this.actor, 3);
     },
 
     disable: function() {
         Main.panel._leftBox.remove_actor(this.actor);
+
+        this.qlPathMon.disconnect(this.qlPathMonSigId);
+        delete this.qlPathMonSigId;
+        delete this.qlPathMon;
+
+        for (let i in this.items) {
+                this.removeItem(i);
+        }
+
+        delete this.actor;
+        delete this.items;
     }
 };
 
