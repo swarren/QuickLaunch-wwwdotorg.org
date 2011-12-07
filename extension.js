@@ -51,10 +51,10 @@ QLContainer.prototype = {
 
         this.items = new Object();
 
-        let glPathObj = Gio.file_new_for_path(qlPath);
+        let qlPathObj = Gio.file_new_for_path(qlPath);
 
-        this.glPathMon = glPathObj.monitor_directory(Gio.FileMonitorFlags.NONE, null);
-        this.glPathMon.connect('changed', Lang.bind(this, function (monitor, f, otherf, event) {
+        this.qlPathMon = qlPathObj.monitor_directory(Gio.FileMonitorFlags.NONE, null);
+        this.qlPathMon.connect('changed', Lang.bind(this, function (monitor, f, otherf, event) {
             if (event == 1)
                 this.addItem(f.get_basename())
             else if (event == 2)
@@ -63,7 +63,7 @@ QLContainer.prototype = {
                 this.addItem(f.get_basename())
         }));
 
-        FileUtils.listDirAsync(glPathObj, Lang.bind(this, function(files) {
+        FileUtils.listDirAsync(qlPathObj, Lang.bind(this, function(files) {
             for (let i = 0; i < files.length; i++)
                 this.addItem(files[i].get_name())
         }));
