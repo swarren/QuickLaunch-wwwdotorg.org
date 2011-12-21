@@ -7,3 +7,60 @@ QuickLaunch@wwwdotorg.org
 This extension adds a button for each Quick Launch .desktop file found
 in ~/.local/user/quicklaunch to the Gnome panel.
 
+= ALTERNATIVES =
+
+If you don't know what a .desktop file is, and simply want to copy icons from
+the existing menu structure to the panel as shortcuts, you're probably better
+off using one of the favorites extensions such as:
+
+https://extensions.gnome.org/extension/4/panel-favorites/
+https://extensions.gnome.org/extension/17/dock/
+
+= HOW TO USE =
+
+.desktop files are text files that describe commands that can be run. They're
+typically used to run graphical applications, but can run console applications
+For a full specification, see:
+
+http://standards.freedesktop.org/desktop-entry-spec/latest/
+
+This extension scans the directory ~/.local/user/quicklaunch for files named
+with a .desktop extension. For each file found, an icon is created in the
+panel which when clicked will execute the command. While running, the
+extension monitors the directory for any added, removed, modified, or renamed
+files, and updates the set of displayed icons accordingly.
+
+You can find existing .desktop files in system directories such as 
+/usr/share/app-install/desktop/, or perhaps run "find /usr/share/ -name
+'*.desktop'"
+
+Or, you can manually create .desktop files using a text editor. Some example
+.desktop files that I use is shown below:
+
+== 00_sync_photos.desktop ==============
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=sync_photos.sh
+Icon=unison2.27.57-gtk
+Exec=/home/swarren/bin/sync_photos.sh
+========================================
+
+== 01_vpn.sh ===========================
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Icon=/usr/share/icons/gnome/32x32/devices/network-wired.png
+Exec=/home/swarren/bin/openvpn-vpn.sh
+Name=openvpn-vpn.sh
+========================================
+
+The icons are displayed in ASCII string sort order. You can obtain a specific
+display order by prefixing your filenames with an incrementing prefix, for
+example the 00_, 01_, 02, ... sequence in the examples above.
