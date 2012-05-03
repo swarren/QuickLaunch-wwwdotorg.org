@@ -1,4 +1,4 @@
-// Copyright (C) 2011 Stephen Warren
+// Copyright (C) 2011-2012 Stephen Warren
 // Licence: GPLv2+
 //
 // Based on Panel Favorites Copyright (C) 2011 R M Yorston
@@ -26,13 +26,13 @@ QLButton.prototype = {
                                      reactive: true });
         this.actor._delegate = this;
 
-        this.actor.set_child(new St.Icon({ 
+        this.actor.set_child(new St.Icon({
             gicon: appinfo.get_icon(),
             // FIXME: Get size from some config value?
             icon_size: 24,
             style_class: 'qlicon'
         }));
-        this.actor.set_tooltip_text(appinfo.get_name());
+        //this.actor.set_tooltip_text(appinfo.get_name());
 
         this.actor.connect('clicked', Lang.bind(this, function() {
             this.appinfo.launch([], null);
@@ -72,7 +72,7 @@ QLContainer.prototype = {
             itemkeys.push(i);
         itemkeys.sort();
         let index = itemkeys.indexOf(filename);
-        this.actor.insert_actor(item.actor, index);
+        this.actor.insert_child_at_index(item.actor, index);
     },
 
     removeItem: function(filename) {
@@ -108,7 +108,7 @@ QLContainer.prototype = {
                 this.addItem(files[i].get_name())
         }));
 
-        Main.panel._leftBox.insert_actor(this.actor, 3);
+        Main.panel._leftBox.insert_child_at_index(this.actor, 3);
     },
 
     disable: function() {
