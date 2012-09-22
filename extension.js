@@ -1,7 +1,7 @@
 // Copyright (C) 2011-2012 Stephen Warren
 // Licence: GPLv2+
 //
-// Based on Panel Favorites Copyright (C) 2011 R M Yorston
+// Based on Panel Favorites Copyright (C) 2011-2012 R M Yorston
 // Based on QuickLaunch@github.com
 
 const FileUtils = imports.misc.fileUtils;
@@ -37,7 +37,15 @@ QLButton.prototype = {
         this.actor.connect('clicked', Lang.bind(this, function() {
             this.appinfo.launch([], null);
         }));
-    }
+
+        this.actor.connect('notify::hover',
+                Lang.bind(this, this._onHoverChanged));
+        this.actor.opacity = 207;
+    },
+
+    _onHoverChanged: function(actor) {
+        actor.opacity = actor.hover ? 255 : 207;
+    },
 };
 
 function QLContainer() {
