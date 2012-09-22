@@ -41,24 +41,26 @@ Or, you can manually create .desktop files using a text editor. Some example
 #!/usr/bin/env xdg-open
 
 [Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=false
-Name=sync_photos.sh
-Icon=unison2.27.57-gtk
+Comment=Synchronize photos
 Exec=/home/swarren/bin/sync_photos.sh
+Icon=unison2.27.57-gtk
+Name=sync_photos.sh
+Terminal=false
+Type=Application
+Version=1.0
 ========================================
 
 == 01_vpn.sh ===========================
 #!/usr/bin/env xdg-open
 
 [Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=true
-Icon=/usr/share/icons/gnome/32x32/devices/network-wired.png
+Comment=VPN to home
 Exec=/home/swarren/bin/openvpn-vpn.sh
+Icon=/usr/share/icons/gnome/32x32/devices/network-wired.png
 Name=openvpn-vpn.sh
+Terminal=true
+Type=Application
+Version=1.0
 ========================================
 
 The icons are displayed in ASCII string sort order. You can obtain a specific

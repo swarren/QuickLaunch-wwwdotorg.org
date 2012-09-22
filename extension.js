@@ -4,6 +4,7 @@
 // Based on Panel Favorites Copyright (C) 2011-2012 R M Yorston
 // Based on QuickLaunch@github.com
 
+const Clutter = imports.gi.Clutter;
 const FileUtils = imports.misc.fileUtils;
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
@@ -32,7 +33,17 @@ QLButton.prototype = {
             icon_size: 24,
             style_class: 'qlicon'
         }));
-        //this.actor.set_tooltip_text(appinfo.get_name());
+
+        let text = appinfo.get_name();
+        let desc = appinfo.get_description();
+        if (desc) {
+            text += '\n' + desc;
+        }
+
+        this.label = new St.Label({ style_class: 'qlitem-label'});
+        this.label.set_text(text);
+        Main.layoutManager.addChrome(this.label);
+        this.label.hide();
 
         this.actor.connect('clicked', Lang.bind(this, function() {
             this.appinfo.launch([], null);
@@ -45,7 +56,54 @@ QLButton.prototype = {
 
     _onHoverChanged: function(actor) {
         actor.opacity = actor.hover ? 255 : 207;
+        if (actor.hover)
+            this.showLabel();
+        else
+            this.hideLabel();
     },
+
+    showLabel: function() {
+        this.label.opacity = 0;
+        this.label.show();
+
+        let [stageX, stageY] = this.actor.get_transformed_position();
+
+        let itemHeight = this.actor.allocation.y2 - this.actor.allocation.y1;
+        let itemWidth = this.actor.allocation.x2 - this.actor.allocation.x1;
+        let labelWidth = this.label.get_width();
+
+        let node = this.label.get_theme_node();
+        let yOffset = node.get_length('-y-offset');
+
+        let y = stageY + itemHeight + yOffset;
+        let x = Math.floor(stageX + itemWidth/2 - labelWidth/2);
+
+        let parent = this.label.get_parent();
+        let parentWidth = parent.allocation.x2 - parent.allocation.x1;
+
+        if (Clutter.get_default_text_direction() == Clutter.TextDirection.LTR) {
+            // stop long tooltips falling off the right of the screen
+            x = Math.min(x, parentWidth-labelWidth-6);
+            // but whatever happens don't let them fall of the left
+            x = Math.max(x, 6);
+        } else {
+            x = Math.max(x, 6);
+            x = Math.min(x, parentWidth-labelWidth-6);
+        }
+
+        this.label.set_position(x, y);
+        this.label.opacity = 255;
+    },
+
+    hideLabel: function() {
+        this.label.opacity = 0;;
+        this.label.hide();
+    },
+
+    destroy: function() {
+        this.label.destroy();
+        this.actor.destroy();
+    }
 };
 
 function QLContainer() {
