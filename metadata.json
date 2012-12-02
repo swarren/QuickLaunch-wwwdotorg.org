@@ -2,9 +2,10 @@
   "description": "Quicklaunch - Launches .desktop files from ~/.local/user/quicklaunch", 
   "name": "WWWDOTORG Quick Launch", 
   "shell-version": [
-    "3.4"
+    "3.4",
+    "3.6"
   ], 
   "url": "https://github.com/swarren/QuickLaunch-wwwdotorg.org", 
   "uuid": "QuickLaunch@wwwdotorg.org", 
-  "version": 6
+  "version": 7
 }
